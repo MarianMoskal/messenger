@@ -51,6 +51,7 @@ export default function Home({ users }) {
           <p>User</p>
           <input type="text" onInput={handleFilterInput} />
         </div>
+        <hr />
         <div>
           <p>Chats</p>
           <ul>

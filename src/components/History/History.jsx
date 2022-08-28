@@ -1,17 +1,23 @@
 import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
+import { fetchAnswer } from "../../API/fetchAnswer";
+import React, { useCallback, useEffect, useState } from "react";
 
 export default function History({ index, users }) {
   const [userMessages, setUserMessages] = useState([]);
+  const [answer, setAnswer] = useState({ text: "", time: "", owner: "" });
 
   useEffect(() => {
-    if (users.length && index !== -1) {
+    if (users[index]) {
       setUserMessages(users[index].messages);
     }
   }, [index, users]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!e.target.input.value) {
+      return;
+    }
 
     const message = {
       text: e.target.input.value,
@@ -19,12 +25,52 @@ export default function History({ index, users }) {
       owner: "User",
     };
 
-    const newMessages = [...users[index].messages, message];
-    users[index].messages = newMessages;
-    window.localStorage.setItem("users", JSON.stringify(users));
-    setUserMessages(newMessages);
-
+    setMessages(message);
+    prepareAnswer(users[index].name);
     e.target.reset();
+  };
+
+  const setMessages = useCallback(
+    (message) => {
+      if (users[index]) {
+        const newMessages = [...users[index].messages, message];
+        users[index].messages = newMessages;
+        window.localStorage.setItem("users", JSON.stringify(users));
+        setUserMessages(newMessages);
+      }
+    },
+    [index, users]
+  );
+
+  useEffect(() => {
+    if (answer.text && answer.time && answer.owner) {
+      alert(`You have recieved a new message from ${answer.owner}`);
+      setMessages(answer);
+      setAnswer({ text: "", time: "", owner: "" });
+    }
+  }, [answer, setMessages]);
+
+  const prepareAnswer = async (name) => {
+    try {
+      const result = await fetchAnswer();
+
+      if (result.status === 200) {
+        const { value } = await result.json();
+
+        setTimeout(() => {
+          const answer = {
+            text: value,
+            time: new Date(Date.now()),
+            owner: name,
+          };
+          setAnswer(answer);
+        }, 10000);
+      }
+    } catch (error) {
+      alert(
+        `There is some problem with fetching your answer. ${error.message}`
+      );
+    }
   };
 
   return (
