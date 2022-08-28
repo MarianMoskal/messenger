@@ -1,4 +1,6 @@
-export const users = [
+
+export const db =
+  [
   {
     name: "Alice",
     id: "a",
@@ -7,13 +9,13 @@ export const users = [
     messages: [
       {
         text: "What is love?",
-        time: "12345",
+        time: `${new Date(2014, 1, 11, 15, 30)}`,
         owner: "Alice"
       },
       {
         text: "I wish I know!",
-        time: "12345",
-        owner: ""
+        time: `${new Date(2014, 1, 11, 15, 45)}`,
+        owner: "User"
       }
     ]
   },
@@ -25,17 +27,17 @@ export const users = [
     messages: [
       {
         text: "Hello. How are you?",
-        time: "12345",
+        time: `${new Date(2017, 5, 6, 11, 15)}`,
         owner: "John"
       },
       {
         text: "Hi. I'm okay. What about you?",
-        time: "12345",
-        owner: ""
+        time: `${new Date(2017, 5, 6, 16, 7)}`,
+        owner: "User"
       },
       {
         text: "I'm okay too. Have a nice day!",
-        time: "12345",
+        time: `${new Date(2017, 5, 6, 19, 5)}`,
         owner: "John"
       }
     ]
@@ -55,14 +57,14 @@ export const users = [
     messages: [
       {
         text: "Let's go for a beer!",
-        time: "12345",
+        time: `${new Date(2014, 1, 11, 15, 30)}`,
         owner: "Luis"
       },
       {
         text: "With a pleasure",
-        time: "12345",
-        owner: ""
+        time: `${new Date(2014, 1, 11, 15, 30)}`,
+        owner: "User"
       }
     ]
   }
-]
+  ]

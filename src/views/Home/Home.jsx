@@ -1,21 +1,32 @@
 import "./Home.css";
 import History from "../../components/History/History";
 import { useEffect, useState } from "react";
-import { users } from "../../db";
 
-export default function Home() {
+export default function Home({ users }) {
+  const [userIndex, setUserIndex] = useState(0);
   const [filteredUsers, setFileterdUsers] = useState(users);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [selectedUserName, setSelectedUserName] = useState(
-    "Select a user to view chat history"
-  );
+  const [selectedUserName, setSelectedUserName] = useState("");
 
   useEffect(() => {
-    if (selectedUserId) {
-      const user = users.find((u) => u.id === selectedUserId);
-      setSelectedUserName(user.name);
+    if (users.length) {
+      setFileterdUsers(users);
     }
-  }, [selectedUserId]);
+  }, [users]);
+
+  useEffect(() => {
+    if (users.length) {
+      const user = users.findIndex((u) => u.id === selectedUserId);
+      setUserIndex(user);
+    }
+  }, [selectedUserId, users]);
+
+  useEffect(() => {
+    if (users && selectedUserId) {
+      const user = users.find((u) => u.id === selectedUserId);
+      setSelectedUserName(user?.name);
+    }
+  }, [selectedUserId, users]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -58,11 +69,17 @@ export default function Home() {
           </ul>
         </div>
       </div>
+
       <div className="chat">
-        <img src="#" alt="" />
-        <p>{selectedUserName}</p>
-        <History id={selectedUserId} />
-        <input type="text" />
+        {selectedUserId ? (
+          <>
+            <img src="#" alt="" />
+            <p>{selectedUserName}</p>
+            <History index={userIndex} users={users} />
+          </>
+        ) : (
+          <h2>Select a user to view chat history</h2>
+        )}
       </div>
     </div>
   );

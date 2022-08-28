@@ -1,23 +1,50 @@
+import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { users } from "../../db";
 
-export default function History({ id }) {
+export default function History({ index, users }) {
   const [userMessages, setUserMessages] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      const user = users.find((u) => u.id === id);
-      setUserMessages(user.messages);
+    if (users.length && index !== -1) {
+      setUserMessages(users[index].messages);
     }
-  }, [id]);
+  }, [index, users]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const message = {
+      text: e.target.input.value,
+      time: new Date(Date.now()),
+      owner: "User",
+    };
+
+    const newMessages = [...users[index].messages, message];
+    users[index].messages = newMessages;
+    window.localStorage.setItem("users", JSON.stringify(users));
+    setUserMessages(newMessages);
+
+    e.target.reset();
+  };
 
   return (
     <div>
-      <ul>
-        {userMessages.map(({ text, time, owner }) => (
-          <li key={text}>{text}</li>
-        ))}
-      </ul>
+      {userMessages.length ? (
+        <ul>
+          {userMessages.map(({ text, time, owner }) => (
+            <li key={text + time}>
+              <p>{text}</p>
+              <p>{format(new Date(time), "Pp")}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <h2>You have no chat history yet</h2>
+      )}
+      <form onSubmit={handleSubmit}>
+        <input type="text" id="input" />
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
 }
