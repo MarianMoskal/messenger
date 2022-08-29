@@ -2,9 +2,17 @@ import { format } from "date-fns";
 import { fetchAnswer } from "../../API/fetchAnswer";
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function History({ index, users }) {
+export default function History({ id, users, moveUserToTop }) {
+  const [index, setIndex] = useState(0);
   const [userMessages, setUserMessages] = useState([]);
   const [answer, setAnswer] = useState({ text: "", time: "", owner: "" });
+
+  useEffect(() => {
+    if (users.length) {
+      const user = users.findIndex((u) => u.id === id);
+      setIndex(user);
+    }
+  }, [id, users]);
 
   useEffect(() => {
     if (users[index]) {
@@ -50,7 +58,6 @@ export default function History({ index, users }) {
 
   useEffect(() => {
     if (answer.text && answer.time && answer.owner) {
-      console.log("xxx");
       alert(`You have recieved a new message from ${answer.owner}`);
       setMessages(answer);
       setAnswer({ text: "", time: "", owner: "" });
@@ -71,8 +78,8 @@ export default function History({ index, users }) {
             owner: name,
           };
           setAnswer(answer);
-          // const updetedUsers = moveUserToTop(_, _, 0);
-          // console.log("Go");
+          const idx = users.findIndex((u) => u.name === answer.owner);
+          moveUserToTop(users, idx, 0);
         }, 10000);
       }
     } catch (error) {
@@ -81,13 +88,6 @@ export default function History({ index, users }) {
       );
     }
   };
-
-  // const moveUserToTop = (arr, fromIdx, toIdx) => {
-  //   const el = arr[fromIdx];
-  //   arr.splice(fromIdx, 1);
-  //   arr.splice(toIdx, 0, el);
-  //   return arr;
-  // };
 
   return (
     <div>

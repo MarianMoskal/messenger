@@ -2,8 +2,8 @@ import "./Home.css";
 import History from "../../components/History/History";
 import { useEffect, useState } from "react";
 
-export default function Home({ users }) {
-  const [userIndex, setUserIndex] = useState(0);
+export default function Home({ data }) {
+  const [users, setUsers] = useState(data);
   const [filteredUsers, setFileterdUsers] = useState(users);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedUserName, setSelectedUserName] = useState("");
@@ -13,13 +13,6 @@ export default function Home({ users }) {
       setFileterdUsers(users);
     }
   }, [users]);
-
-  useEffect(() => {
-    if (users.length) {
-      const user = users.findIndex((u) => u.id === selectedUserId);
-      setUserIndex(user);
-    }
-  }, [selectedUserId, users]);
 
   useEffect(() => {
     if (users && selectedUserId) {
@@ -44,6 +37,15 @@ export default function Home({ users }) {
     }
   };
 
+  const moveUserToTop = (arr, fromIdx, toIdx) => {
+    const newArr = JSON.parse(JSON.stringify(arr));
+    const el = newArr[fromIdx];
+    newArr.splice(fromIdx, 1);
+    newArr.splice(toIdx, 0, el);
+    window.localStorage.setItem("users", JSON.stringify(newArr));
+    setUsers(newArr);
+  };
+
   return (
     <div className="container">
       <div className="aside">
@@ -56,7 +58,7 @@ export default function Home({ users }) {
           <p>Chats</p>
           <ul>
             {filteredUsers.length ? (
-              filteredUsers.map(({ name, id, online }) => (
+              filteredUsers.map(({ name, id, online, avatar }) => (
                 <li key={id}>
                   <a href="/" id={id} onClick={handleClick}>
                     <img src="" alt="" />
@@ -76,7 +78,11 @@ export default function Home({ users }) {
           <>
             <img src="#" alt="" />
             <p>{selectedUserName}</p>
-            <History index={userIndex} users={users} />
+            <History
+              users={users}
+              id={selectedUserId}
+              moveUserToTop={moveUserToTop}
+            />
           </>
         ) : (
           <h2>Select a user to view chat history</h2>
