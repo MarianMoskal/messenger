@@ -22,7 +22,7 @@ function App() {
   return (
     <Suspense fallback={"Loading..."}>
       <Routes>
-        <Route path="/" element={<Home data={data} />} />
+        <Route path="/" element={<Home users={data} />} />
         <Route path="*" element={<h1 style={centered}>Not Found</h1>} />
       </Routes>
     </Suspense>

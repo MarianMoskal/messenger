@@ -104,7 +104,7 @@ export default function History({ id, users, moveUserToTop }) {
         <h2>You have no chat history yet</h2>
       )}
       <form onSubmit={handleSubmit}>
-        <input type="text" id="input" />
+        <input type="text" id="input" placeholder="Type your message" />
         <button type="submit">Send</button>
       </form>
     </div>
