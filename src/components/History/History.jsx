@@ -2,17 +2,9 @@ import { format } from "date-fns";
 import { fetchAnswer } from "../../API/fetchAnswer";
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function History({ id, users, moveUserToTop }) {
-  const [index, setIndex] = useState(0);
+export default function History({ index, users, moveUserToTop }) {
   const [userMessages, setUserMessages] = useState([]);
   const [answer, setAnswer] = useState({ text: "", time: "", owner: "" });
-
-  useEffect(() => {
-    if (users.length) {
-      const user = users.findIndex((u) => u.id === id);
-      setIndex(user);
-    }
-  }, [id, users]);
 
   useEffect(() => {
     if (users[index]) {
@@ -47,7 +39,8 @@ export default function History({ id, users, moveUserToTop }) {
       if (users[localIndex]) {
         const newMessages = [...users[localIndex].messages, message];
         users[localIndex].messages = newMessages;
-        window.localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("users", JSON.stringify(users));
+
         if (localIndex === index) {
           setUserMessages(newMessages);
         }
@@ -77,9 +70,10 @@ export default function History({ id, users, moveUserToTop }) {
             time: new Date(Date.now()),
             owner: name,
           };
+
           setAnswer(answer);
-          const idx = users.findIndex((u) => u.name === answer.owner);
-          moveUserToTop(users, idx, 0);
+          // const idx = users.findIndex((u) => u.name === answer.owner);
+          moveUserToTop(users, index, 0);
         }, 10000);
       }
     } catch (error) {
@@ -91,10 +85,18 @@ export default function History({ id, users, moveUserToTop }) {
 
   return (
     <div>
+      {users[index] && (
+        <img src={users[index].avatar} alt="" width="40" height="40" />
+      )}
+      {users[index] && users[index].online && (
+        <img src="/ok.svg" alt="" width="15" height="15" />
+      )}
+      {users[index] && <p>{users[index].name}</p>}
       {userMessages.length ? (
         <ul>
-          {userMessages.map(({ text, time, owner }) => (
+          {userMessages.map(({ text, time, owner, avatar }) => (
             <li key={text + time}>
+              {/* <img src={avatar} alt="" width="40" height="40" /> */}
               <p>{text}</p>
               <p>{format(new Date(time), "Pp")}</p>
             </li>
@@ -104,8 +106,16 @@ export default function History({ id, users, moveUserToTop }) {
         <h2>You have no chat history yet</h2>
       )}
       <form onSubmit={handleSubmit}>
-        <input type="text" id="input" placeholder="Type your message" />
-        <button type="submit">Send</button>
+        <input
+          type="text"
+          id="input"
+          placeholder="Type your message"
+          autoComplete="off"
+          required
+        />
+        <button type="submit">
+          <img src="/send.svg" alt="" width="20" height="20" />
+        </button>
       </form>
     </div>
   );

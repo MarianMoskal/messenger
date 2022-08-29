@@ -1,12 +1,17 @@
 import "./Home.css";
 import History from "../../components/History/History";
 import { useEffect, useState } from "react";
+import { db } from "../../db";
 
-export default function Home({ users }) {
-  const [filteredUsers, setFileterdUsers] = useState(users);
+export default function Home() {
+  const [users, setUsers] = useState(
+    localStorage.getItem("users")
+      ? JSON.parse(window.localStorage.getItem("users"))
+      : localStorage.setItem("users", JSON.stringify([...db])) || []
+  );
+  const [index, setIndex] = useState(-1);
+  const [filteredUsers, setFileterdUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [selectedUserName, setSelectedUserName] = useState("");
-  const [selectedUserAvatar, setSelectedUserAvatar] = useState("");
 
   useEffect(() => {
     if (users.length) {
@@ -15,18 +20,11 @@ export default function Home({ users }) {
   }, [users]);
 
   useEffect(() => {
-    if (users && selectedUserId) {
-      const user = users.find((u) => u.id === selectedUserId);
-      setSelectedUserName(user.name);
+    if (users.length) {
+      const userIdx = users.findIndex((u) => u.id === selectedUserId);
+      setIndex(userIdx);
     }
   }, [selectedUserId, users]);
-
-  useEffect(() => {
-    if (filteredUsers.length && selectedUserId) {
-      const user = filteredUsers.find((u) => u.id === selectedUserId);
-      setSelectedUserAvatar(user.avatar);
-    }
-  }, [filteredUsers, selectedUserId]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -47,10 +45,13 @@ export default function Home({ users }) {
   const moveUserToTop = (arr, fromIdx, toIdx) => {
     const newArr = JSON.parse(JSON.stringify(arr));
     const el = newArr[fromIdx];
+
     newArr.splice(fromIdx, 1);
-    newArr.splice(toIdx, 0, el);
-    window.localStorage.setItem("users", JSON.stringify(newArr));
-    setFileterdUsers(newArr);
+    newArr.unshift(el);
+
+    localStorage.setItem("users", JSON.stringify(newArr));
+
+    setUsers(newArr);
   };
 
   return (
@@ -58,11 +59,15 @@ export default function Home({ users }) {
       <div className="aside">
         <div>
           <img src="/user.svg" alt="" width="30" height="30" />
-          <input
-            type="text"
-            onInput={handleFilterInput}
-            placeholder="Search or start new chat"
-          />
+          <img src="/ok.svg" alt="" width="15" height="15" />
+          <div>
+            <img src="/search.svg" alt="" width="15" height="15" />
+            <input
+              type="text"
+              onInput={handleFilterInput}
+              placeholder="Search or start new chat"
+            />
+          </div>
         </div>
         <hr />
         <div>
@@ -73,6 +78,9 @@ export default function Home({ users }) {
                 <li key={id}>
                   <a href="/" id={id} onClick={handleClick}>
                     <img src={avatar} alt="" width="40" height="40" />
+                    {online && (
+                      <img src="/ok.svg" alt="" width="15" height="15" />
+                    )}
                     <p>{name}</p>
                   </a>
                 </li>
@@ -86,15 +94,7 @@ export default function Home({ users }) {
 
       <div className="chat">
         {selectedUserId ? (
-          <>
-            <img src={selectedUserAvatar} alt="" width="40" height="40" />
-            <p>{selectedUserName}</p>
-            <History
-              users={users}
-              id={selectedUserId}
-              moveUserToTop={moveUserToTop}
-            />
-          </>
+          <History index={index} users={users} moveUserToTop={moveUserToTop} />
         ) : (
           <h2>Select a user to view chat history</h2>
         )}
