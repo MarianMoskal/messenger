@@ -25,18 +25,24 @@ export default function History({ index, users }) {
       owner: "User",
     };
 
-    setMessages(message);
+    setMessages(message, index);
     prepareAnswer(users[index].name);
     e.target.reset();
   };
 
   const setMessages = useCallback(
-    (message) => {
-      if (users[index]) {
-        const newMessages = [...users[index].messages, message];
-        users[index].messages = newMessages;
+    (message, localIndex) => {
+      if (localIndex === -1 || localIndex === undefined) {
+        localIndex = users.findIndex((u) => u.name === message.owner);
+      }
+
+      if (users[localIndex]) {
+        const newMessages = [...users[localIndex].messages, message];
+        users[localIndex].messages = newMessages;
         window.localStorage.setItem("users", JSON.stringify(users));
-        setUserMessages(newMessages);
+        if (localIndex === index) {
+          setUserMessages(newMessages);
+        }
       }
     },
     [index, users]
@@ -44,11 +50,12 @@ export default function History({ index, users }) {
 
   useEffect(() => {
     if (answer.text && answer.time && answer.owner) {
+      console.log("xxx");
       alert(`You have recieved a new message from ${answer.owner}`);
       setMessages(answer);
       setAnswer({ text: "", time: "", owner: "" });
     }
-  }, [answer, setMessages]);
+  }, [answer, index, setMessages]);
 
   const prepareAnswer = async (name) => {
     try {
@@ -64,6 +71,8 @@ export default function History({ index, users }) {
             owner: name,
           };
           setAnswer(answer);
+          // const updetedUsers = moveUserToTop(_, _, 0);
+          // console.log("Go");
         }, 10000);
       }
     } catch (error) {
@@ -72,6 +81,13 @@ export default function History({ index, users }) {
       );
     }
   };
+
+  // const moveUserToTop = (arr, fromIdx, toIdx) => {
+  //   const el = arr[fromIdx];
+  //   arr.splice(fromIdx, 1);
+  //   arr.splice(toIdx, 0, el);
+  //   return arr;
+  // };
 
   return (
     <div>
