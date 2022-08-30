@@ -1,6 +1,6 @@
 import "./Home.css";
 import History from "../../components/History/History";
-import { getTime } from "date-fns";
+import { getTime, format } from "date-fns";
 import { useEffect, useState } from "react";
 import { db } from "../../db";
 
@@ -56,12 +56,17 @@ export default function Home() {
   };
 
   const lastMessage = (arr) => {
-    const { text } = arr.reduce((prev, current) => {
-      return getTime(new Date(prev.date)) > getTime(new Date(current.date))
-        ? prev
-        : current;
-    });
-    return text.length < 25 ? text : `${text.substring(0, 25)}...`;
+    if (arr.length) {
+      const { text, date } = arr.reduce((prev, current) => {
+        return getTime(new Date(prev.date)) > getTime(new Date(current.date))
+          ? prev
+          : current;
+      });
+      return {
+        text: text.length < 25 ? text : `${text.substring(0, 25)}...`,
+        date,
+      };
+    }
   };
 
   const updateUsers = (arr) => {
@@ -86,9 +91,10 @@ export default function Home() {
         <hr />
         <div>
           <p>Chats</p>
-          <ul>
-            {filteredUsers.length ? (
-              filteredUsers.map(({ name, id, online, avatar, messages }) => (
+
+          {filteredUsers.length ? (
+            <ul>
+              {filteredUsers.map(({ name, id, online, avatar, messages }) => (
                 <li key={id}>
                   <a href="/" id={id} onClick={handleClick}>
                     <div>
@@ -97,15 +103,22 @@ export default function Home() {
                         <img src="/ok.svg" alt="" width="15" height="15" />
                       )}
                       <p>{name}</p>
-                      {messages.length ? <p>{lastMessage(messages)}</p> : null}
+                      {messages.length ? (
+                        <p>{lastMessage(messages).text}</p>
+                      ) : null}
+                      {messages.length ? (
+                        <p>
+                          {format(new Date(lastMessage(messages).date), "PP")}
+                        </p>
+                      ) : null}
                     </div>
                   </a>
                 </li>
-              ))
-            ) : (
-              <li>Matches not found</li>
-            )}
-          </ul>
+              ))}
+            </ul>
+          ) : (
+            <div>Matches not found</div>
+          )}
         </div>
       </div>
 
@@ -118,7 +131,7 @@ export default function Home() {
             updateParentsComponent={updateUsers}
           />
         ) : (
-          <h2>Select a user to view chat history</h2>
+          <div>Select a user to view chat history</div>
         )}
       </div>
     </div>
