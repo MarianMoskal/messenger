@@ -2,9 +2,19 @@ import { format } from "date-fns";
 import { fetchAnswer } from "../../API/fetchAnswer";
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function History({ index, users, moveUserToTop }) {
+export default function History({
+  index,
+  users,
+  moveUserToTop,
+  updateParentsComponent,
+}) {
   const [userMessages, setUserMessages] = useState([]);
-  const [answer, setAnswer] = useState({ text: "", time: "", owner: "" });
+  const [answer, setAnswer] = useState({
+    text: "",
+    date: "",
+    owner: "",
+    avatar: "",
+  });
 
   useEffect(() => {
     if (users[index]) {
@@ -21,8 +31,9 @@ export default function History({ index, users, moveUserToTop }) {
 
     const message = {
       text: e.target.input.value,
-      time: new Date(Date.now()),
+      date: new Date(Date.now()),
       owner: "User",
+      avatar: "",
     };
 
     setMessages(message, index);
@@ -39,21 +50,24 @@ export default function History({ index, users, moveUserToTop }) {
       if (users[localIndex]) {
         const newMessages = [...users[localIndex].messages, message];
         users[localIndex].messages = newMessages;
-        localStorage.setItem("users", JSON.stringify(users));
+
+        const newUsers = JSON.parse(JSON.stringify(users));
+        localStorage.setItem("users", JSON.stringify(newUsers));
+        updateParentsComponent(newUsers);
 
         if (localIndex === index) {
           setUserMessages(newMessages);
         }
       }
     },
-    [index, users]
+    [index, updateParentsComponent, users]
   );
 
   useEffect(() => {
-    if (answer.text && answer.time && answer.owner) {
+    if (answer.text && answer.date && answer.owner) {
       alert(`You have recieved a new message from ${answer.owner}`);
       setMessages(answer);
-      setAnswer({ text: "", time: "", owner: "" });
+      setAnswer({ text: "", date: "", owner: "", avatar: "" });
     }
   }, [answer, index, setMessages]);
 
@@ -67,12 +81,17 @@ export default function History({ index, users, moveUserToTop }) {
         setTimeout(() => {
           const answer = {
             text: value,
-            time: new Date(Date.now()),
+            date: new Date(Date.now()),
             owner: name,
+            avatar: `/${name}.jpg`,
           };
 
+          users.forEach((u) => {
+            if (u.name === answer.owner) {
+              u.online = true;
+            }
+          });
           setAnswer(answer);
-          // const idx = users.findIndex((u) => u.name === answer.owner);
           moveUserToTop(users, index, 0);
         }, 10000);
       }
@@ -94,11 +113,20 @@ export default function History({ index, users, moveUserToTop }) {
       {users[index] && <p>{users[index].name}</p>}
       {userMessages.length ? (
         <ul>
-          {userMessages.map(({ text, time, owner, avatar }) => (
-            <li key={text + time}>
-              {/* <img src={avatar} alt="" width="40" height="40" /> */}
-              <p>{text}</p>
-              <p>{format(new Date(time), "Pp")}</p>
+          {userMessages.map(({ text, date, owner, avatar }) => (
+            <li key={text + date}>
+              {owner === "User" ? (
+                <div>
+                  <p>{text}</p>
+                  <p>{format(new Date(date), "Pp")}</p>
+                </div>
+              ) : (
+                <div>
+                  <img src={avatar} alt="" width="40" height="40" />
+                  <p>{text}</p>
+                  <p>{format(new Date(date), "Pp")}</p>
+                </div>
+              )}
             </li>
           ))}
         </ul>

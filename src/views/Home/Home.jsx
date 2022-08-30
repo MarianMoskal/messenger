@@ -1,5 +1,6 @@
 import "./Home.css";
 import History from "../../components/History/History";
+import { getTime } from "date-fns";
 import { useEffect, useState } from "react";
 import { db } from "../../db";
 
@@ -54,6 +55,19 @@ export default function Home() {
     setUsers(newArr);
   };
 
+  const lastMessage = (arr) => {
+    const { text } = arr.reduce((prev, current) => {
+      return getTime(new Date(prev.date)) > getTime(new Date(current.date))
+        ? prev
+        : current;
+    });
+    return text.length < 25 ? text : `${text.substring(0, 25)}...`;
+  };
+
+  const updateUsers = (arr) => {
+    setUsers(arr);
+  };
+
   return (
     <div className="container">
       <div className="aside">
@@ -74,14 +88,17 @@ export default function Home() {
           <p>Chats</p>
           <ul>
             {filteredUsers.length ? (
-              filteredUsers.map(({ name, id, online, avatar }) => (
+              filteredUsers.map(({ name, id, online, avatar, messages }) => (
                 <li key={id}>
                   <a href="/" id={id} onClick={handleClick}>
-                    <img src={avatar} alt="" width="40" height="40" />
-                    {online && (
-                      <img src="/ok.svg" alt="" width="15" height="15" />
-                    )}
-                    <p>{name}</p>
+                    <div>
+                      <img src={avatar} alt="" width="40" height="40" />
+                      {online && (
+                        <img src="/ok.svg" alt="" width="15" height="15" />
+                      )}
+                      <p>{name}</p>
+                      {messages.length ? <p>{lastMessage(messages)}</p> : null}
+                    </div>
                   </a>
                 </li>
               ))
@@ -94,7 +111,12 @@ export default function Home() {
 
       <div className="chat">
         {selectedUserId ? (
-          <History index={index} users={users} moveUserToTop={moveUserToTop} />
+          <History
+            index={index}
+            users={users}
+            moveUserToTop={moveUserToTop}
+            updateParentsComponent={updateUsers}
+          />
         ) : (
           <h2>Select a user to view chat history</h2>
         )}

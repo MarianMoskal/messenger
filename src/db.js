@@ -2,69 +2,76 @@
 export const db =
   [
     {
-      name: "Alice",
+      name: "John",
       id: "a",
-      avatar: '/Alice.jpg',
-      online: true,
+      avatar: '/John.jpg',
+      online: false,
       messages: [
         {
-          text: "What is love?",
-          time: `${new Date(2014, 1, 11, 15, 30)}`,
-          owner: "Alice"
+          text: "Hello. How are you?",
+          date: `${new Date(2017, 5, 6, 11, 15)}`,
+          owner: "John",
+          avatar: '/John.jpg'
         },
         {
-          text: "I wish I know!",
-          time: `${new Date(2014, 1, 11, 15, 45)}`,
-          owner: "User"
+          text: "Hi. I'm okay. What about you?",
+          date: `${new Date(2017, 5, 6, 16, 7)}`,
+          owner: "User",
+          avatar: ''
+        },
+        {
+          text: "I'm okay too. Have a nice day!",
+          date: `${new Date(2017, 5, 6, 19, 5)}`,
+          owner: "John",
+          avatar: '/John.jpg'
         }
       ]
     },
     {
-      name: "John",
+      name: "Luis",
       id: "b",
-      avatar: '/John.jpg',
-      online: true,
+      avatar: '/Luis.jpg',
+      online: false,
       messages: [
         {
-          text: "Hello. How are you?",
-          time: `${new Date(2017, 5, 6, 11, 15)}`,
-          owner: "John"
+          text: "Let's go for a beer!",
+          date: `${new Date(2015, 1, 11, 15, 30)}`,
+          owner: "Luis",
+          avatar: '/Luis.jpg'
         },
         {
-          text: "Hi. I'm okay. What about you?",
-          time: `${new Date(2017, 5, 6, 16, 7)}`,
-          owner: "User"
+          text: "With a pleasure",
+          date: `${new Date(2015, 1, 11, 15, 30)}`,
+          owner: "User",
+          avatar: ''
+        }
+      ]
+    },
+    {
+      name: "Alice",
+      id: "c",
+      avatar: '/Alice.jpg',
+      online: false,
+      messages: [
+        {
+          text: "What is love?",
+          date: `${new Date(2014, 1, 11, 15, 30)}`,
+          owner: "Alice",
+          avatar: '/Alice.jpg'
         },
         {
-          text: "I'm okay too. Have a nice day!",
-          time: `${new Date(2017, 5, 6, 19, 5)}`,
-          owner: "John"
+          text: "I wish I know!",
+          date: `${new Date(2014, 1, 11, 15, 45)}`,
+          owner: "User",
+          avatar: '',
         }
       ]
     },
     {
       name: "Peter",
-      id: "c",
+      id: "d",
       avatar: '/Peter.jpg',
-      online: true,
+      online: false,
       messages: []
     },
-    {
-      name: "Luis",
-      id: "d",
-      avatar: '/Luis.jpg',
-      online: true,
-      messages: [
-        {
-          text: "Let's go for a beer!",
-          time: `${new Date(2014, 1, 11, 15, 30)}`,
-          owner: "Luis"
-        },
-        {
-          text: "With a pleasure",
-          time: `${new Date(2014, 1, 11, 15, 30)}`,
-          owner: "User"
-        }
-      ]
-    }
   ];
