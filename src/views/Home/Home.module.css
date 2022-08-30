@@ -4,13 +4,6 @@
   /* text-align: center; */
 }
 
-.aside {
-  display: inline-block;
-  width: 500px;
-  /* padding: 20px; */
-  border: 1px solid;
-}
-
 .chat {
   display: inline-block;
   width: 100%;

@@ -1,8 +1,8 @@
-import "./Home.css";
+import s from "./Home.module.css";
+import Aside from "../../components/Aside/Aside";
 import History from "../../components/History/History";
-import { getTime, format } from "date-fns";
 import { useEffect, useState } from "react";
-import { db } from "../../db";
+import { db } from "../../db/db";
 
 export default function Home() {
   const [users, setUsers] = useState(
@@ -11,14 +11,7 @@ export default function Home() {
       : localStorage.setItem("users", JSON.stringify([...db])) || []
   );
   const [index, setIndex] = useState(-1);
-  const [filteredUsers, setFileterdUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
-
-  useEffect(() => {
-    if (users.length) {
-      setFileterdUsers(users);
-    }
-  }, [users]);
 
   useEffect(() => {
     if (users.length) {
@@ -32,18 +25,7 @@ export default function Home() {
     setSelectedUserId(e.currentTarget.id);
   };
 
-  const handleFilterInput = (e) => {
-    if (e.target.value) {
-      const usersFilteredByInputValue = users.filter((u) =>
-        u.name.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-      setFileterdUsers(usersFilteredByInputValue);
-    } else {
-      setFileterdUsers(users);
-    }
-  };
-
-  const moveUserToTop = (arr, fromIdx, toIdx) => {
+  const moveUserToTop = (arr, fromIdx) => {
     const newArr = JSON.parse(JSON.stringify(arr));
     const el = newArr[fromIdx];
 
@@ -55,74 +37,15 @@ export default function Home() {
     setUsers(newArr);
   };
 
-  const lastMessage = (arr) => {
-    if (arr.length) {
-      const { text, date } = arr.reduce((prev, current) => {
-        return getTime(new Date(prev.date)) > getTime(new Date(current.date))
-          ? prev
-          : current;
-      });
-      return {
-        text: text.length < 25 ? text : `${text.substring(0, 25)}...`,
-        date,
-      };
-    }
-  };
-
   const updateUsers = (arr) => {
     setUsers(arr);
   };
 
   return (
-    <div className="container">
-      <div className="aside">
-        <div>
-          <img src="/user.svg" alt="" width="30" height="30" />
-          <img src="/ok.svg" alt="" width="15" height="15" />
-          <div>
-            <img src="/search.svg" alt="" width="15" height="15" />
-            <input
-              type="text"
-              onInput={handleFilterInput}
-              placeholder="Search or start new chat"
-            />
-          </div>
-        </div>
-        <hr />
-        <div>
-          <p>Chats</p>
+    <div className={s.container}>
+      <Aside users={users} handleClick={handleClick} />
 
-          {filteredUsers.length ? (
-            <ul>
-              {filteredUsers.map(({ name, id, online, avatar, messages }) => (
-                <li key={id}>
-                  <a href="/" id={id} onClick={handleClick}>
-                    <div>
-                      <img src={avatar} alt="" width="40" height="40" />
-                      {online && (
-                        <img src="/ok.svg" alt="" width="15" height="15" />
-                      )}
-                      <p>{name}</p>
-                      {messages.length ? (
-                        <p>{lastMessage(messages).text}</p>
-                      ) : null}
-                      {messages.length ? (
-                        <p>
-                          {format(new Date(lastMessage(messages).date), "PP")}
-                        </p>
-                      ) : null}
-                    </div>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div>Matches not found</div>
-          )}
-        </div>
-      </div>
-
-      <div className="chat">
+      <div className={s.chat}>
         {selectedUserId ? (
           <History
             index={index}

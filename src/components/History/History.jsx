@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import Form from "./Form";
+import Messages from "./Messages";
 import { fetchAnswer } from "../../API/fetchAnswer";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -21,25 +22,6 @@ export default function History({
       setUserMessages(users[index].messages);
     }
   }, [index, users]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!e.target.input.value) {
-      return;
-    }
-
-    const message = {
-      text: e.target.input.value,
-      date: new Date(Date.now()),
-      owner: "User",
-      avatar: "",
-    };
-
-    setMessages(message, index);
-    prepareAnswer(users[index].name);
-    e.target.reset();
-  };
 
   const setMessages = useCallback(
     (message, localIndex) => {
@@ -92,7 +74,7 @@ export default function History({
             }
           });
           setAnswer(answer);
-          moveUserToTop(users, index, 0);
+          moveUserToTop(users, index);
         }, 10000);
       }
     } catch (error) {
@@ -105,46 +87,23 @@ export default function History({
   return (
     <div>
       {users[index] && (
-        <img src={users[index].avatar} alt="" width="40" height="40" />
+        <div>
+          <img src={users[index].avatar} alt="" width="40" height="40" />
+          {users[index].online && (
+            <img src="/ok.svg" alt="" width="15" height="15" />
+          )}
+          <p>{users[index].name}</p>
+        </div>
       )}
-      {users[index] && users[index].online && (
-        <img src="/ok.svg" alt="" width="15" height="15" />
-      )}
-      {users[index] && <p>{users[index].name}</p>}
-      {userMessages.length ? (
-        <ul>
-          {userMessages.map(({ text, date, owner, avatar }) => (
-            <li key={text + date}>
-              {owner === "User" ? (
-                <div>
-                  <p>{text}</p>
-                  <p>{format(new Date(date), "Pp")}</p>
-                </div>
-              ) : (
-                <div>
-                  <img src={avatar} alt="" width="40" height="40" />
-                  <p>{text}</p>
-                  <p>{format(new Date(date), "Pp")}</p>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <h2>You have no chat history yet</h2>
-      )}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="input"
-          placeholder="Type your message"
-          autoComplete="off"
-          required
-        />
-        <button type="submit">
-          <img src="/send.svg" alt="" width="20" height="20" />
-        </button>
-      </form>
+
+      <Messages userMessages={userMessages} />
+
+      <Form
+        users={users}
+        index={index}
+        setMessages={setMessages}
+        prepareAnswer={prepareAnswer}
+      />
     </div>
   );
 }

@@ -1,0 +1,29 @@
+.aside {
+  display: inline-block;
+  width: 500px;
+  /* padding: 20px; */
+  border-right: 1px solid #E6E6E6;
+}
+
+.header{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  padding: 15px;
+  background-color: #F5F5F5;
+
+  border-bottom: 1px solid #E6E6E6;
+}
+
+.user {
+  position: relative;
+  width: 45px;
+  height: 45px;
+}
+
+.online {
+ position: absolute;
+ bottom: 0;
+ right: 2%;
+}
