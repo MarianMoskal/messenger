@@ -18,3 +18,12 @@ code {
 ul {
   list-style: none;
 }
+
+p, ul {
+  margin:0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}

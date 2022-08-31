@@ -1,17 +1,14 @@
 .container {
   height: 100vh;
   display: flex;
-  /* text-align: center; */
+
 }
 
-.chat {
-  display: inline-block;
+.wrapper {
   width: 100%;
-  padding: 20px;
-  border: 1px solid;
-}
-
-.history {
-  height: 80%;
-  background-color: yellow;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: xx-large;
+  font-weight: 900;
 }

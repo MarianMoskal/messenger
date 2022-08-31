@@ -7,7 +7,8 @@
   outline: none;
   border: 1px solid #EAEAEA;
   border-radius: 20px;
-  padding: 10px 10px 10px 35px;
+  padding: 8px 10px 8px 35px;
+  line-height: 22px;
 }
 
 .image{

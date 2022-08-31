@@ -1,0 +1,67 @@
+.container {
+  overflow-y: auto;
+}
+
+.empty{
+  padding: 10px 0;
+  font-size: large;
+  font-weight: 700;
+  text-align: center;
+  background-color: rgba(255, 255, 0, 0.801);
+  border-radius: 20px;
+}
+
+.heading{
+  color: #419DCB;
+  font-size: x-large;
+  margin: 25px 0 35px 15px;
+}
+
+.item {
+  padding: 15px;
+  border-bottom: 1px solid #E6E6E6;
+}
+
+.contact{
+  display: flex;
+}
+
+.avatar{
+  position: relative;
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+}
+
+.image{
+  border-radius: 50%;
+}
+
+.online{
+  position: absolute;
+  bottom: -2px;
+  right: 2%;
+}
+
+.nameWrapper{
+  width: calc(100% - (45px + 80px + 20px));
+  margin-right: 10px;
+}
+
+.name{
+  color: #646363;
+  font-weight: 500;
+  margin-right: auto;
+}
+
+.message{
+  color: #9D9D9D;
+  font-size: smaller;
+}
+
+.date{
+  color: #646363;
+  font-size: smaller;
+  min-width: 82px;
+  text-align: end;
+}

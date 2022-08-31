@@ -1,7 +1,6 @@
 .aside {
-  display: inline-block;
-  width: 500px;
-  /* padding: 20px; */
+  /* display: inline-block; */
+  width: 45%;
   border-right: 1px solid #E6E6E6;
 }
 
@@ -9,10 +8,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 140px;
+  height: 150px;
   padding: 15px;
   background-color: #F5F5F5;
-
   border-bottom: 1px solid #E6E6E6;
 }
 
@@ -24,6 +22,6 @@
 
 .online {
  position: absolute;
- bottom: 0;
+ bottom: -2px;
  right: 2%;
 }

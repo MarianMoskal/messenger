@@ -1,4 +1,5 @@
 import Form from "./Form";
+import s from "./History.module.css";
 import Messages from "./Messages";
 import { fetchAnswer } from "../../API/fetchAnswer";
 import React, { useCallback, useEffect, useState } from "react";
@@ -85,14 +86,28 @@ export default function History({
   };
 
   return (
-    <div>
+    <div className={s.container}>
       {users[index] && (
-        <div>
-          <img src={users[index].avatar} alt="" width="40" height="40" />
-          {users[index].online && (
-            <img src="/ok.svg" alt="" width="15" height="15" />
-          )}
-          <p>{users[index].name}</p>
+        <div className={s.header}>
+          <div className={s.avatar}>
+            <img
+              className={s.image}
+              src={users[index].avatar}
+              alt=""
+              width="45"
+              height="45"
+            />
+            {users[index].online && (
+              <img
+                className={s.online}
+                src="/ok.svg"
+                alt=""
+                width="15"
+                height="15"
+              />
+            )}
+          </div>
+          <p className={s.name}>{users[index].name}</p>
         </div>
       )}
 

@@ -11,37 +11,61 @@ export default function Contacts({ filteredUsers, handleClick }) {
           : current;
       });
       return {
-        text: text.length < 25 ? text : `${text.substring(0, 25)}...`,
+        text: text.length < 50 ? text : `${text.substring(0, 50)}...`,
         date,
       };
     }
   };
 
   return (
-    <div>
-      <p>Chats</p>
+    <div className={s.container}>
       {filteredUsers && filteredUsers.length ? (
-        <ul>
-          {filteredUsers.map(({ name, id, online, avatar, messages }) => (
-            <li key={id}>
-              <a href="/" id={id} onClick={handleClick}>
-                <div>
-                  <img src={avatar} alt="" width="40" height="40" />
-                  {online && (
-                    <img src="/ok.svg" alt="" width="15" height="15" />
-                  )}
-                  <p>{name}</p>
-                  {messages.length ? <p>{lastMessage(messages).text}</p> : null}
-                  {messages.length ? (
-                    <p>{format(new Date(lastMessage(messages).date), "PP")}</p>
-                  ) : null}
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <>
+          <p className={s.heading}>Chats</p>
+          <ul>
+            {filteredUsers.map(({ name, id, online, avatar, messages }) => (
+              <li key={id} className={s.item}>
+                <a href="/" id={id} onClick={handleClick} className={s.link}>
+                  <div className={s.contact}>
+                    <div className={s.avatar}>
+                      <img
+                        className={s.image}
+                        src={avatar}
+                        alt=""
+                        width="45"
+                        height="45"
+                      />
+                      {online && (
+                        <img
+                          className={s.online}
+                          src="/ok.svg"
+                          alt=""
+                          width="15"
+                          height="15"
+                        />
+                      )}
+                    </div>
+                    <div className={s.nameWrapper}>
+                      <p className={s.name}>{name}</p>
+                      {messages.length ? (
+                        <p className={s.message}>
+                          {lastMessage(messages).text}
+                        </p>
+                      ) : null}
+                    </div>
+                    {messages.length ? (
+                      <p className={s.date}>
+                        {format(new Date(lastMessage(messages).date), "PP")}
+                      </p>
+                    ) : null}
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
       ) : (
-        <div>Matches not found</div>
+        <div className={s.empty}>Matches not found</div>
       )}
     </div>
   );

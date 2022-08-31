@@ -4,28 +4,38 @@ import { format } from "date-fns";
 
 export default function Messages({ userMessages }) {
   return (
-    <div>
+    <div className={s.container}>
       {userMessages.length ? (
         <ul>
           {userMessages.map(({ text, date, owner, avatar }) => (
-            <li key={text + date}>
+            <li className={s.item} key={text + date}>
               {owner === "User" ? (
-                <div>
-                  <p>{text}</p>
-                  <p>{format(new Date(date), "Pp")}</p>
-                </div>
+                <>
+                  <div className={s.wrapper}>
+                    <p className={s.userMessage}>{text}</p>
+                  </div>
+                  <p className={s.userDate}>{format(new Date(date), "Pp")}</p>
+                </>
               ) : (
-                <div>
-                  <img src={avatar} alt="" width="40" height="40" />
-                  <p>{text}</p>
-                  <p>{format(new Date(date), "Pp")}</p>
-                </div>
+                <>
+                  <div className={s.wrapper}>
+                    <img
+                      className={s.image}
+                      src={avatar}
+                      alt=""
+                      width="45"
+                      height="45"
+                    />
+                    <p className={s.message}>{text}</p>
+                  </div>
+                  <p className={s.date}>{format(new Date(date), "Pp")}</p>
+                </>
               )}
             </li>
           ))}
         </ul>
       ) : (
-        <h2>You have no chat history yet</h2>
+        <h1 className={s.heading}>You have no chat history yet</h1>
       )}
     </div>
   );

@@ -1,0 +1,33 @@
+.form {
+  height: 120px;
+  background-color: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper {
+  position: relative;
+  width: 80%;
+}
+
+.input {
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: 1px solid #EAEAEA;
+  border-radius: 20px;
+  padding: 0 50px 0 25px;
+}
+
+.button {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translate(0, -45%);
+  outline: none;
+  border: none;
+  background-color: #fff;
+}
+
+

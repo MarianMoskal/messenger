@@ -44,19 +44,16 @@ export default function Home() {
   return (
     <div className={s.container}>
       <Aside users={users} handleClick={handleClick} />
-
-      <div className={s.chat}>
-        {selectedUserId ? (
-          <History
-            index={index}
-            users={users}
-            moveUserToTop={moveUserToTop}
-            updateParentsComponent={updateUsers}
-          />
-        ) : (
-          <div>Select a user to view chat history</div>
-        )}
-      </div>
+      {selectedUserId ? (
+        <History
+          index={index}
+          users={users}
+          moveUserToTop={moveUserToTop}
+          updateParentsComponent={updateUsers}
+        />
+      ) : (
+        <div className={s.wrapper}>Select a user to view chat history</div>
+      )}
     </div>
   );
 }

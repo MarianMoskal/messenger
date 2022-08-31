@@ -1,0 +1,58 @@
+.container {
+  height: calc(100% - (77px + 120px));
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #E6E6E6;
+  padding: 15px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.image {
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.date {
+  font-size:  small;
+  margin-bottom: 25px;
+  margin-left: 80px;
+}
+
+.userDate{
+  display: flex;
+  justify-content: end;
+  font-size: small;
+  margin-bottom: 25px;  
+  margin-right: 5px;
+}
+
+.message {
+  padding: 15px;
+  background-color: #3C4252;
+  border-radius: 25px;
+  color: #DEE3EC;
+}
+
+.userMessage {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 15px;
+  background-color: #E0E0E0;
+  border-radius: 25px;
+  color: #616161;
+  margin-bottom: 7px;
+  margin-left: auto;
+  text-align: right;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20%;
+}

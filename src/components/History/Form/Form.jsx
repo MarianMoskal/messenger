@@ -22,19 +22,26 @@ export default function Form({ users, index, prepareAnswer, setMessages }) {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <form className={s.form} onSubmit={handleSubmit}>
+      <div className={s.wrapper}>
         <input
+          className={s.input}
           type="text"
           id="input"
           placeholder="Type your message"
           autoComplete="off"
           required
         />
-        <button type="submit">
-          <img src="/send.svg" alt="" width="20" height="20" />
+        <button type="submit" className={s.button}>
+          <img
+            className={s.icon}
+            src="/send.svg"
+            alt=""
+            width="20"
+            height="20"
+          />
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
